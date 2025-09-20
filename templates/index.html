@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Price Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">🚗 Vehicle Price Predictor</h1>
+                <p class="tagline">AI-Powered Vehicle Valuation System</p>
+            </div>
+        </header>
+
+        <!-- Model Status Alert -->
+        {% if not model_loaded %}
+        <div class="alert alert-error">
+            <span>⚠️ Model not loaded. Please ensure model files are present in the application directory.</span>
+        </div>
+        {% else %}
+        <div class="alert alert-success">
+            <span>✅ Model loaded successfully and ready for predictions!</span>
+        </div>
+        {% endif %}
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Prediction Form -->
+            <div class="form-container">
+                <h2 class="section-title">Enter Vehicle Details</h2>
+                
+                <form id="predictionForm">
+                    <div class="form-grid">
+                        <!-- Vehicle Model -->
+                        <div class="form-group">
+                            <label for="model">Vehicle Model</label>
+                            <select id="model" name="model" required>
+                                <option value="">Select a model...</option>
+                                {% for value, label in models.items() %}
+                                <option value="{{ value }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Year of Manufacture -->
+                        <div class="form-group">
+                            <label for="year">Year of Manufacture</label>
+                            <select id="year" name="year" required>
+                                <option value="">Select year...</option>
+                                {% for year in years %}
+                                <option value="{{ year }}">{{ year }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Transmission -->
+                        <div class="form-group">
+                            <label for="transmission">Transmission</label>
+                            <select id="transmission" name="transmission" required>
+                                <option value="">Select transmission...</option>
+                                {% for value, label in transmissions.items() %}
+                                <option value="{{ value }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Body Type -->
+                        <div class="form-group">
+                            <label for="body_type">Body Type</label>
+                            <select id="body_type" name="body_type" required>
+                                <option value="">Select body type...</option>
+                                {% for value, label in body_types.items() %}
+                                <option value="{{ value }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Fuel Type -->
+                        <div class="form-group">
+                            <label for="fuel_type">Fuel Type</label>
+                            <select id="fuel_type" name="fuel_type" required>
+                                <option value="">Select fuel type...</option>
+                                {% for value, label in fuel_types.items() %}
+                                <option value="{{ value }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Engine Capacity -->
+                        <div class="form-group">
+                            <label for="engine_capacity">Engine Capacity (cc)</label>
+                            <select id="engine_capacity" name="engine_capacity" required>
+                                <option value="">Select engine capacity...</option>
+                                {% for capacity in engine_capacities %}
+                                <option value="{{ capacity }}">{{ capacity }}cc</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Mileage -->
+                        <div class="form-group full-width">
+                            <label for="mileage">Mileage (km)</label>
+                            <input type="number" id="mileage" name="mileage" 
+                                   placeholder="Enter vehicle mileage in kilometers" 
+                                   min="0" max="500000" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" {% if not model_loaded %}disabled{% endif %}>
+                        <span class="btn-text">Get Price Prediction</span>
+                        <span class="btn-loader" style="display: none;">Predicting...</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Results Section -->
+            <div id="results" class="results-container" style="display: none;">
+                <h2 class="section-title">Prediction Results</h2>
+                
+                <div class="price-display">
+                    <span class="price-label">Estimated Price</span>
+                    <div class="price-value" id="predictedPrice">-</div>
+                </div>
+
+                <div class="details-grid" id="vehicleDetails">
+                    <!-- Details will be populated by JavaScript -->
+                </div>
+
+                <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                    Make Another Prediction
+                </button>
+            </div>
+
+            <!-- Error Display -->
+            <div id="errorDisplay" class="alert alert-error" style="display: none;">
+                <span id="errorMessage"></span>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 Vehicle Price Predictor. Powered by Machine Learning.</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

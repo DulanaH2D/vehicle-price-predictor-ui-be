@@ -1,0 +1,7 @@
+Flask==2.3.3
+pandas==2.2.2
+numpy==2.0.2
+scikit-learn==1.6.1
+xgboost==3.0.5
+joblib==1.5.2
+moviepy==1.0.3
